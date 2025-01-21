@@ -1,0 +1,19 @@
+<h1>Available Workout Sessions</h1>
+<% @workout_sessions.each do |session| %>
+  <div class="session">
+    <div class="trainer-avatar">
+      <% if session.user.avatar_url.present? %>
+        <img src="<%= session.user.avatar_url %>" alt="<%= session.user.name %>'s avatar" />
+      <% else %>
+        <img src="default-avatar.png" alt="Default avatar" />
+      <% end %>
+    </div>
+    <div class="session-info">
+      <h2><%= session.location %></h2>
+      <p>Duration: <%= session.duration %> minutes</p>
+      <p>Price: $<%= session.price %></p>
+      <p>Trainer: <%= session.user.name %></p>
+      <p>Description: <%= session.desc %></p>
+    </div>
+  </div>
+<% end %>

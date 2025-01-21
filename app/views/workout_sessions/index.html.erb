@@ -1,11 +1,24 @@
 <h1>Available Workout Sessions</h1>
-<% @workout_sessions.each do |session| %>
-  <div class="session">
-    <h2><%= session.title %></h2>
-    <p>Location: <%= session.location %></p>
-    <p>Trainer: <%= session.trainer.name %></p>
-    <p>Duration: <%= session.duration %> minutes</p>
-    <p>Price: $<%= session.price %></p>
-    <p>Description: <%= session.desc %></p>
-  </div>
-<% end %>
+<div class="workout-sessions">
+  <% @workout_sessions.each do |session| %>
+    <div class="session-card">
+      <!-- Trainer Avatar -->
+      <div class="trainer-avatar">
+        <% if session.trainer.avatar_url.present? %>
+          <img src="<%= session.trainer.avatar_url %>" alt="<%= session.trainer.name %>'s avatar" />
+        <% else %>
+          <img src="/assets/default-avatar.png" alt="Default avatar" />
+        <% end %>
+      </div>
+      <!-- Session Details -->
+      <div class="session-details">
+        <h2><%= session.title %></h2>
+        <p><strong>Trainer:</strong> <%= session.trainer.name %></p>
+        <p><strong>Location:</strong> <%= session.location %></p>
+        <p><strong>Duration:</strong> <%= session.duration %> minutes</p>
+        <p><strong>Price:</strong> $<%= session.price %></p>
+        <p><strong>Description:</strong> <%= session.desc %></p>
+      </div>
+    </div>
+  <% end %>
+</div>

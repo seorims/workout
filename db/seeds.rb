@@ -7,5 +7,21 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-User.create(name: "Tanaka Taro", role: "Trainer", description: "Expert fitness coach", avatar_url: "john_avatar.png")
-WorkoutSession.create(location: "Gym", duration: 60, price: 20.0, desc: "Morning session", user: User.first)
+# create trainer
+trainer = User.create(name: "Tanaka Taro", role: "Trainer", description: "Expert fitness coach")
+
+# create trainee
+trainee = User.create(name: "Sato Hanako", role: "Trainee", description: "Loves fitness classes")
+
+# create workout session
+workout = WorkoutSession.create(
+  title: "Morning Yoga",
+  location: "Studio A",
+  duration: 60,
+  price: 20.0,
+  desc: "A relaxing yoga session to start your day.",
+  trainer: trainer
+)
+
+# create booking
+Booking.create(workout_session: workout, user: trainee, status: "confirmed", start_time: Time.now)

@@ -1,0 +1,13 @@
+<h1><%= @workout_session.title %></h1>
+<p><%= @workout_session.description %></p>
+<p><strong>Price:</strong> $<%= @workout_session.price %></p>
+<p><strong>Location:</strong> <%= @workout_session.location %></p>
+<p><strong>Duration:</strong> <%= @workout_session.duration %> hours</p>
+
+<% if current_user.trainee? %>
+  <%= form_with url: workout_session_bookings_path(@workout_session), method: :post, local: true do |f| %>
+    <%= f.submit "Book Now", class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+
+<%= link_to "Back to Workout Sessions", workout_sessions_path, class: "btn btn-secondary" %>

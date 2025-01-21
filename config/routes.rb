@@ -8,6 +8,18 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
-  resources :workout_sessions, only: [:index]
+    # root "posts#index"
+
+   # Devise routes for user authentication
+   devise_for :users
+
+   # Sessions routes
+   resources :workout_sessions, only: [:index, :show] do
+     # Nested bookings routes for session-specific actions
+     resources :bookings, only: [:create]
+   end
+
+   # Bookings routes
+   resources :bookings, only: [:index, :destroy]
+
 end

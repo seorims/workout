@@ -8,20 +8,38 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 # create trainer
-trainer = User.create(name: "Tanaka Taro", role: "Trainer", description: "Expert fitness coach")
+
+require 'faker'
+trainers = 10.times.map do
+  User.create(
+    name: Faker::Name.name,         # This generates a random name
+    role: "Trainer",                # All of them are trainers
+    description: Faker::Job.title # This generates a random job description
+  )
+end
 
 # create trainee
-trainee = User.create(name: "Sato Hanako", role: "Trainee", description: "Loves fitness classes")
+trainees = 100.times.map do
+  User.create(
+    name: Faker::Name.name,         # This generates a random name
+    role: "Trainee",                # All of them are trainees
+    description: Faker::Job.title # This generates a random job description
+  )
+end
+
+puts "Created 10 trainers and 100 trainees!"
 
 # create workout session
-workout = WorkoutSession.create(
-  title: "Morning Yoga",
-  location: "Studio A",
-  duration: 60,
-  price: 20.0,
-  desc: "A relaxing yoga session to start your day.",
-  trainer: trainer
-)
+10.times do
+  WorkoutSession.create(
+    title: Faker::Educator.course_name, # Random session titles
+    location: Faker::Address.community, # Random location
+    duration: rand(30..90), # Random duration between 30 and 90 minutes
+    price: rand(15.0..50.0).round(2), # Random price between $15.00 and $50.00
+    desc: Faker::Lorem.sentence(word_count: 10), # Random description
+    trainer: trainers.sample # Assign a random trainer
+  )
+end
 
 # create booking
 Booking.create(workout_session: workout, user: trainee, status: "confirmed", start_time: Time.now)

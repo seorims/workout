@@ -8,4 +8,17 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+   # Devise routes for user authentication
+   devise_for :users
+
+   # Sessions routes
+   resources :sessions, only: [:index, :show] do
+     # Nested bookings routes for session-specific actions
+     resources :bookings, only: [:create]
+   end
+
+   # Bookings routes
+   resources :bookings, only: [:index, :destroy]
+
 end

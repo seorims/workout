@@ -1,6 +1,6 @@
 class WorkoutSession < ApplicationRecord
-  belongs_to :user
-  has_many :bookings
-end
+  belongs_to :trainer, class_name: "User", foreign_key: "user_id"
 
-# to simulate pull request
+  has_many :bookings
+  has_many :trainees, through: :bookings, source: :user
+end

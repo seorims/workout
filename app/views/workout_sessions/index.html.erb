@@ -1,0 +1,11 @@
+<h1>Available Workout Sessions</h1>
+<% @workout_sessions.each do |session| %>
+  <div class="session">
+    <h2><%= session.title %></h2>
+    <p>Location: <%= session.location %></p>
+    <p>Trainer: <%= session.trainer.name %></p>
+    <p>Duration: <%= session.duration %> minutes</p>
+    <p>Price: $<%= session.price %></p>
+    <p>Description: <%= session.desc %></p>
+  </div>
+<% end %>

@@ -4,3 +4,4 @@ class Booking < ApplicationRecord
 end
 
 # to simulate pull request
+# to simulate merge

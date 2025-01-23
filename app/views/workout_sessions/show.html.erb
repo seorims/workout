@@ -4,12 +4,12 @@
       <h1 class="card-title"><%= @workout_session.title %></h1>
     </div>
     <div class="card-body">
-      <p class="card-text"><%= @workout_session.description %></p>
+      <p class="card-text"><%= @workout_session.desc%></p>
       <p class="card-text"><strong>Price:</strong> $<%= @workout_session.price %></p>
       <p class="card-text"><strong>Location:</strong> <%= @workout_session.location %></p>
       <p class="card-text"><strong>Duration:</strong> <%= @workout_session.duration %> hours</p>
 
-      <% if current_user.trainee? %>
+      <% if current_user&.role == "trainee" %>
         <div class="mt-4">
           <%= form_with url: workout_session_bookings_path(@workout_session), method: :post, local: true do |f| %>
             <%= f.submit "Book Now", class: "btn btn-success btn-lg" %>

@@ -1,4 +1,11 @@
 class WorkoutSessionsController < ApplicationController
+  before_action :set_workout_session, only: [:show]
+
+  # Displays a single workout session
+  def show
+    # @workout_session is already set by the before_action
+  end
+
   def index
     @workout_sessions = WorkoutSession.all
 
@@ -15,5 +22,14 @@ class WorkoutSessionsController < ApplicationController
         )
       end
     end
+  end
+
+  private
+
+  # Finds the workout session by ID
+  def set_workout_session
+    @workout_session = WorkoutSession.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to workout_sessions_path, alert: "Workout session not found."
   end
 end

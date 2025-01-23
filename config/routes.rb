@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Root route
-  root to: "pages#home"
+  root to: "workout_sessions#index"
 
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check

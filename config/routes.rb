@@ -1,25 +1,21 @@
 Rails.application.routes.draw do
-  get 'workout_sessions/index'
-  root to: "pages#home"
+  # Devise routes for user authentication
+  devise_for :users
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Root route
+  root to: "pages#home"
+
+  # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
-    # root "posts#index"
+  # Sessions routes
+  resources :workout_sessions, only: [:index, :show] do
+    # Nested bookings routes for session-specific actions
+    resources :bookings, only: [:create]
+  end
 
-   # Devise routes for user authentication
-   devise_for :users
-
-   # Sessions routes
-   resources :workout_sessions, only: [:index, :show] do
-     # Nested bookings routes for session-specific actions
-     resources :bookings, only: [:create]
-   end
-
-   # Bookings routes
-   resources :bookings, only: [:index, :destroy]
-
+  # Bookings routes
+  resources :bookings, only: [:index, :destroy]
 end

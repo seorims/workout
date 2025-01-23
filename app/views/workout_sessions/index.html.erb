@@ -1,24 +1,30 @@
-<h1>Available Workout Sessions</h1>
-<div class="workout-sessions">
-  <% @workout_sessions.each do |session| %>
-    <div class="session-card">
-      <!-- Trainer Avatar -->
-      <div class="trainer-avatar">
-        <% if session.trainer.avatar_url.present? %>
-          <img src="<%= session.trainer.avatar_url %>" alt="<%= session.trainer.name %>'s avatar" />
-        <% else %>
-          <img src="/assets/default-avatar.png" alt="Default avatar" />
-        <% end %>
+<h1 class="text-center my-4">Explore Workout Sessions</h1>
+<div class="container">
+  <div class="row gy-4">
+    <% @workout_sessions.each do |session| %>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <!-- image -->
+          <img src="<%= session.trainer&.avatar_url || "https://ui-avatars.com/api/?name=#{session.trainer&.name || 'Trainer'}" %>"
+               class="card-img-top"
+               alt="<%= session.trainer&.name || 'Trainer' %>'s avatar">
+          <!-- card body -->
+          <div class="card-body">
+            <h5 class="card-title"><%= session.title %></h5>
+            <p class="card-text">
+              <strong>Trainer:</strong> <%= session.trainer&.name || "No Trainer Assigned" %><br>
+              <strong>Location:</strong> <%= session.location %><br>
+              <strong>Duration:</strong> <%= session.duration %> minutes<br>
+              <strong>Price:</strong> $<%= session.price %>
+            </p>
+            <p class="card-text text-muted"><%= session.desc %></p>
+          </div>
+          <!-- action button -->
+          <div class="card-footer bg-white border-0 text-center">
+            <a href="#" class="btn btn-primary w-100">Join Now</a>
+          </div>
+        </div>
       </div>
-      <!-- Session Details -->
-      <div class="session-details">
-        <h2><%= session.title %></h2>
-        <p><strong>Trainer:</strong> <%= session.trainer.name %></p>
-        <p><strong>Location:</strong> <%= session.location %></p>
-        <p><strong>Duration:</strong> <%= session.duration %> minutes</p>
-        <p><strong>Price:</strong> $<%= session.price %></p>
-        <p><strong>Description:</strong> <%= session.desc %></p>
-      </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>

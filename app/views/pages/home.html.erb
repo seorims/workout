@@ -1,2 +1,74 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<!-- hero section -->
+<div class="position-relative vh-100 mb-5 bg-dark">
+  <div class="display-1 position-absolute top-50 start-50 translate-middle text-center">
+    💪
+  </div>
+  <div class="position-absolute top-50 start-50 translate-middle text-center text-white bg-dark bg-opacity-50 p-5 rounded">
+    <h1 class="display-2 fw-bold mb-4">Transform Your Fitness Journey</h1>
+    <p class="lead fs-3 mb-5">Connect with expert trainers for personalized sessions</p>
+    <%= link_to "Get Started", workout_sessions_path, class: "btn btn-primary btn-lg px-5 py-3 fs-4" %>
+  </div>
+</div>
+<!-- featured workouts -->
+<section class="container my-5 py-5">
+  <h2 class="display-4 text-center mb-5">Featured Workouts</h2>
+  <div class="row g-5">
+    <% @featured_sessions&.each do |session| %>
+      <div class="col-md-4">
+        <div class="card shadow h-100 border-0">
+          <div class="card-img-top bg-light p-5 text-center">
+            <span class="display-1">🏋️</span>
+          </div>
+          <div class="card-body p-4">
+            <h3 class="card-title h4 mb-3"><%= session.title %></h3>
+            <p class="card-text mb-4"><%= truncate(session.desc, length: 100) %></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-primary fw-bold fs-4">$<%= session.price %></span>
+              <%= link_to "Learn More", workout_session_path(session), class: "btn btn-outline-primary px-4" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
+<section class="container text-center mb-5">
+  <%= link_to workout_sessions_path, class: "btn btn-outline-primary btn-lg px-5 py-3" do %>
+    Browse All Sessions
+    <i class="bi bi-arrow-right ms-2"></i>
+  <% end %>
+</section>
+<!-- benefits section -->
+<section class="bg-light py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="text-center">
+          <i class="bi bi-person-check fs-1 text-primary mb-3"></i>
+          <h3>Expert Trainers</h3>
+          <p>Work with certified professionals</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center">
+          <i class="bi bi-geo-alt fs-1 text-primary mb-3"></i>
+          <h3>Flexible Locations</h3>
+          <p>Train at your preferred location</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center">
+          <i class="bi bi-calendar-check fs-1 text-primary mb-3"></i>
+          <h3>Easy Scheduling</h3>
+          <p>Book sessions at your convenience</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- cta section -->
+<section class="container my-5 text-center">
+  <h2>Ready to Start Your Fitness Journey?</h2>
+  <p class="lead mb-4">Join our community of fitness enthusiasts today</p>
+  <%= link_to "Sign Up Now", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+</section>

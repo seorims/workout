@@ -20,7 +20,7 @@ trainers = 10.times.map do
 end
 
 # create trainees
-trainees = 100.times.map do
+trainees = 10.times.map do
   User.create!(
     name: Faker::Name.name,
     email: Faker::Internet.email,

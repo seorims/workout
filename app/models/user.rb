@@ -10,6 +10,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # validations
+  validates :email, presence: true, uniqueness: true
+  validates :password, presence: true, length: { minimum: 6 }
+
   def avatar_url
     # uses ui-avatars api as fallback for all users
     "https://ui-avatars.com/api/?name=#{name || 'User'}"

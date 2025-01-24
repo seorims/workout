@@ -1,0 +1,24 @@
+<h1>My Bookings</h1>
+
+<% if @bookings.any? %>
+  <div class="booking-list">
+    <h2>Your Bookings</h2>
+    <ul class="booking-items">
+      <% @bookings.each do |booking| %>
+        <li class="booking-item">
+          <div class="booking-info">
+            <h3 class="workout-title"><%= booking.workout_session.title %></h3>
+            <p class="booking-date">
+              <strong>Scheduled:</strong> <%= booking.workout_session.start_time.strftime("%d/%m/%Y %H:%M") %>
+            </p>
+            <p class="trainer-name">
+              <strong>Trainer:</strong> <%= booking.workout_session.trainer.name %>
+            </p>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <p>You have no bookings yet.</p>
+<% end %>

@@ -56,7 +56,8 @@ workout_sessions.each do |workout|
       workout_session: workout,
       user: trainees.sample, # assign a random trainee
       status: "confirmed",
-      start_time: Faker::Time.forward(days: 30, period: :morning)
+      start_time: Faker::Time.forward(days: 30, period: :morning),
+      booked_at: Time.now # set the booked_at field
     )
   end
 end

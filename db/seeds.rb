@@ -1,15 +1,15 @@
 require 'faker'
 
-# clear existing data
+# Clear existing data
 Booking.destroy_all
 WorkoutSession.destroy_all
 User.destroy_all
 
-# create realistic trainers
+# Create realistic trainers
 realistic_trainers = [
- {name: "Sarah Chu", email: "sc@trainer.com", desc: "NASM Certified Personal Trainer, 10+ years experience"},
- {name: "Lio Catalan", email: "ls@trainer.com", desc: "Yoga Alliance Certified, Specialized in Vinyasa Flow"},
- {name: "Nico Nico", email: "nn@trainer.com", desc: "NASA Engineer Scarecrow"}
+ {name: "John Smith", email: "john.smith@trainer.com", desc: "NASM Certified Personal Trainer, 10+ years experience"},
+ {name: "Sarah Johnson", email: "sarah.j@trainer.com", desc: "Yoga Alliance Certified, Specialized in Vinyasa Flow"},
+ {name: "Mike Chen", email: "mike.chen@trainer.com", desc: "CrossFit Level 2 Trainer, Former Olympic Weightlifter"}
 ].map do |trainer|
  User.create!(
    name: trainer[:name],
@@ -20,7 +20,7 @@ realistic_trainers = [
  )
 end
 
-# create realistic trainees
+# Create realistic trainees
 realistic_trainees = [
  {name: "Emma Davis", email: "emma.d@gmail.com"},
  {name: "James Wilson", email: "james.w@gmail.com"},
@@ -34,7 +34,7 @@ realistic_trainees = [
  )
 end
 
-# create realistic sessions first
+# Create realistic sessions first
 realistic_sessions = [
  {title: "High Intensity Interval Training", location: "Downtown Gym", duration: 45, price: 35.00, desc: "Full body workout combining cardio and strength training"},
  {title: "Power Yoga Flow", location: "Zen Studio", duration: 60, price: 25.00, desc: "Dynamic yoga sequence focusing on strength and flexibility"},
@@ -52,7 +52,7 @@ end
 
 puts "Created #{realistic_sessions.count} realistic sessions"
 
-# create faker trainers
+# Create faker trainers
 trainers = 10.times.map do
  User.create!(
    name: Faker::Name.name,
@@ -63,7 +63,7 @@ trainers = 10.times.map do
  )
 end
 
-# create faker trainees
+# Create faker trainees
 trainees = 10.times.map do
  User.create!(
    name: Faker::Name.name,
@@ -76,7 +76,7 @@ end
 
 puts "Created #{trainers.count} faker trainers and #{trainees.count} faker trainees"
 
-# create faker workout sessions with better descriptions
+# Create faker workout sessions with better descriptions
 10.times do
  duration = [30, 45, 60, 90].sample
  sport = Faker::Sport.sport(include_ancient: true, include_unusual: true).titleize
@@ -105,7 +105,7 @@ end
 total_sessions = WorkoutSession.count
 puts "Total sessions created: #{total_sessions}"
 
-# create bookings
+# Create bookings
 WorkoutSession.all.each do |workout|
  rand(5..15).times do
    Booking.create!(

@@ -8,7 +8,7 @@
 <div class="container mb-5">
   <% if @bookings.any? %>
     <div class="row g-4">
-      <% @bookings.each do |booking| %>
+      <% @bookings.each_with_index do |booking, index| %>
         <div class="col-md-6 col-lg-4">
           <div class="card h-100 shadow-sm border-0">
             <div class="card-body p-4">
@@ -29,10 +29,12 @@
                   <i class="bi bi-person-circle me-2"></i>
                   <%= booking.workout_session.trainer.name %>
                 </p>
-                <!-- Display the status -->
+
+                <!-- Set the status of the first booking to 'Completed', others to 'Pending' -->
                 <p class="card-text">
                   <i class="bi bi-flag me-2"></i>
-                  <strong>Status:</strong> Pending
+                  <strong>Status:</strong>
+                  <%= index == 0 ? 'Completed' : 'Pending' %>
                 </p>
               </div>
               <div class="d-grid">

@@ -70,14 +70,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_24_170300) do
   end
 
   create_table "workout_sessions", force: :cascade do |t|
+    t.string "title"
     t.string "location"
     t.integer "duration"
-    t.decimal "price"
+    t.decimal "price", precision: 10, scale: 2
     t.text "desc"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "title"
     t.datetime "start_time"
     t.index ["user_id"], name: "index_workout_sessions_on_user_id"
   end

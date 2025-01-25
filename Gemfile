@@ -51,7 +51,7 @@ gem "simple_form", github: "heartcombo/simple_form"
 gem "sassc-rails"
 
 group :development, :test do
-  gem "dotenv-rails"
+  gem "dotenv-rails", groups: [:development, :test]
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
 end
@@ -75,3 +75,5 @@ end
 
 gem 'faker'
 gem 'devise'
+gem 'cloudinary'
+gem 'carrierwave', '~> 2.0'

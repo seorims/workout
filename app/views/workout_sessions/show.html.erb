@@ -4,15 +4,23 @@
       <h1 class="card-title"><%= @workout_session.title %></h1>
     </div>
     <div class="card-body">
-      <p class="card-text"><%= @workout_session.desc%></p>
+      <p class="card-text"><%= @workout_session.desc %></p>
       <p class="card-text"><strong>Price:</strong> $<%= @workout_session.price %></p>
       <p class="card-text"><strong>Location:</strong> <%= @workout_session.location %></p>
       <p class="card-text"><strong>Duration:</strong> <%= @workout_session.duration %> hours</p>
 
-      <% if current_user&.role == "trainee" %>
+      <% if user_signed_in? && current_user.role == "trainee" %>
         <div class="mt-4">
-          <%= form_with url: workout_session_bookings_path(@workout_session), method: :post, local: true do |f| %>
-            <%= f.submit "Book Now", class: "btn btn-success btn-lg" %>
+          <%= form_with model: [ @workout_session, Booking.new ], url: workout_session_bookings_path(@workout_session), method: :post, local: true do |f| %>
+            <div class="form-group">
+              <%= f.label :booked_at, "Select Session Time" %>
+              <%= f.datetime_local_select :booked_at, class: "form-control" %>
+            </div>
+            <div class="form-group mt-3">
+              <%= f.label :status, "Booking Status" %>
+              <%= f.select :status, ['pending', 'confirmed', 'canceled'], {}, class: "form-control" %>
+            </div>
+            <%= f.submit "Book Now", class: "btn btn-success btn-lg mt-4" %>
           <% end %>
         </div>
       <% end %>

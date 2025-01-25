@@ -1,5 +1,5 @@
 class BookingsController < ApplicationController
-  before_action :authenticate_user!
+  skip_before_action :authenticate_user!
 
   def create
     @workout_session = WorkoutSession.find(params[:workout_session_id])

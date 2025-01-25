@@ -3,7 +3,7 @@ class WorkoutSession < ApplicationRecord
   has_many :bookings
   has_many :trainees, through: :bookings, source: :user
 
-  def start_time
-    bookings.first&.start_time
-  end
+  # def start_time
+  #   bookings.first&.start_time
+  # end
 end

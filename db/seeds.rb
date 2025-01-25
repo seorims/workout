@@ -93,13 +93,13 @@ puts "Created #{trainers.count} faker trainers and #{trainees.count} faker train
  ]
 
  WorkoutSession.create!(
-   title: "#{duration} min of #{sport}",
-   location: Faker::Address.community,
-   duration: duration,
-   price: rand(15.0..50.0).round(2),
-   desc: descriptions.sample,
-   user_id: trainers.sample.id
- )
+  title: "#{duration} min of #{sport}",
+  location: Faker::Address.community,
+  duration: duration,
+  price: rand(15.0..50.0).round(2),
+  desc: descriptions.sample,
+  user_id: trainers.sample.id
+)
 end
 
 total_sessions = WorkoutSession.count
@@ -107,14 +107,15 @@ puts "Total sessions created: #{total_sessions}"
 
 # Create bookings
 WorkoutSession.all.each do |workout|
- rand(5..15).times do
-   Booking.create!(
-     workout_session: workout,
-     user: trainees.sample,
-     status: "confirmed",
-     start_time: Faker::Time.forward(days: 30, period: :morning)
-   )
- end
+  rand(5..15).times do
+    Booking.create!(
+      workout_session: workout,
+      user: trainees.sample,
+      status: "confirmed",
+      start_time: Time.current + rand(1..30).days,  # Add this line
+      booked_at: Time.now
+    )
+  end
 end
 
 puts "Created bookings for all sessions!"

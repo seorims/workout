@@ -13,38 +13,41 @@ trainers = 10.times.map do
   User.create!(
     name: Faker::Name.name,
     email: Faker::Internet.email,
-    password: "password", # provide a default password
+    password: "password", # default password
     role: "Trainer",
     description: Faker::Job.title
   )
 end
 
-# create trainees
+# dreate trainees
 trainees = 10.times.map do
   User.create!(
     name: Faker::Name.name,
     email: Faker::Internet.email,
-    password: "password", # provide a default password
+    password: "password", # default password
     role: "Trainee",
     description: Faker::Job.title
   )
 end
 
-puts "created #{trainers.count} trainers and #{trainees.count} trainees!"
+puts "Created #{trainers.count} trainers and #{trainees.count} trainees!"
 
 # create workout sessions
 workout_sessions = 10.times.map do
+  duration = [30, 45, 60, 90].sample # random duration in minutes
+  sport = Faker::Sport.sport(include_ancient: true, include_unusual: true).titleize # random sport name with proper capitalisation
+
   WorkoutSession.create!(
-    title: Faker::Educator.course_name,
+    title: "#{duration} min of #{sport}",
     location: Faker::Address.community,
-    duration: rand(30..90), # duration in minutes
+    duration: duration, # duration in minutes
     price: rand(15.0..50.0).round(2), # price in dollars
-    desc: Faker::Lorem.sentence(word_count: 10), # use correct column name
+    desc: Faker::Lorem.sentence(word_count: 10), # description
     user_id: trainers.sample.id # assign a random trainer as the owner
   )
 end
 
-puts "created #{workout_sessions.count} workout sessions!"
+puts "Created #{workout_sessions.count} workout sessions!"
 
 # create bookings for trainees
 workout_sessions.each do |workout|
@@ -58,4 +61,4 @@ workout_sessions.each do |workout|
   end
 end
 
-puts "created bookings for workout sessions!"
+puts "Created bookings for workout sessions!"

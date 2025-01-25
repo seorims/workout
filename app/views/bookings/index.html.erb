@@ -1,5 +1,4 @@
 <h1>My Bookings</h1>
-
 <% if @bookings.any? %>
   <div class="booking-list">
     <h2>Your Bookings</h2>
@@ -9,7 +8,7 @@
           <div class="booking-info">
             <h3 class="workout-title"><%= booking.workout_session.title %></h3>
             <p class="booking-date">
-              <strong>Scheduled:</strong> <%= booking.workout_session.start_time.strftime("%d/%m/%Y %H:%M") %>
+              <strong>Scheduled:</strong> <%= booking.start_time.strftime("%d/%m/%Y %H:%M") %>
             </p>
             <p class="trainer-name">
               <strong>Trainer:</strong> <%= booking.workout_session.trainer.name %>

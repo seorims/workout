@@ -22,7 +22,7 @@
           <!-- action button -->
           <div class="card-footer bg-white border-0 text-center">
             <%= link_to "Details", workout_session_path(session), class: "btn btn-primary w-100 mb-2" %>
-            <%= button_to "Book Now!", workout_session_bookings_path(session), method: :post, class: "btn btn-primary w-100" %>
+            <%= link_to "Book Now!", new_workout_session_booking_path(session), class: "btn btn-primary w-100" %>
           </div>
         </div>
       </div>

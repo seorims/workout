@@ -1,19 +1,25 @@
 class BookingsController < ApplicationController
-  # Ensure users are authenticated before creating a booking
-  before_action :authenticate_user!, only: [:create]
+  # ensure users are authenticated before accessing booking actions
+  before_action :authenticate_user!, only: [:new, :create, :index]
+  before_action :set_workout_session, only: [:new, :create]
+
+  def new
+    @booking = Booking.new
+  end
 
   def create
-    @workout_session = WorkoutSession.find(params[:workout_session_id])
     @booking = current_user.bookings.new(
       workout_session: @workout_session,
-      booked_at: Time.now.in_time_zone('Tokyo')
+      start_time: booking_params[:start_time],
+      booked_at: Time.current.in_time_zone('Tokyo')
     )
 
     if @booking.save
       redirect_to bookings_path, notice: 'Booking successfully created.'
     else
       Rails.logger.error @booking.errors.full_messages.join(", ")
-      redirect_to workout_session_path(@workout_session), alert: "Failed to create booking: #{@booking.errors.full_messages.join(", ")}"
+      flash[:alert] = "Failed to create booking: #{@booking.errors.full_messages.join(", ")}"
+      render :new
     end
   end
 
@@ -23,7 +29,11 @@ class BookingsController < ApplicationController
 
   private
 
+  def set_workout_session
+    @workout_session = WorkoutSession.find(params[:workout_session_id])
+  end
+
   def booking_params
-    params.require(:booking).permit(:booked_at, :status)
+    params.require(:booking).permit(:start_time, :booked_at, :status)
   end
 end

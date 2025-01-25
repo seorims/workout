@@ -8,27 +8,15 @@
       <p class="card-text"><strong>Price:</strong> $<%= @workout_session.price %></p>
       <p class="card-text"><strong>Location:</strong> <%= @workout_session.location %></p>
       <p class="card-text"><strong>Duration:</strong> <%= @workout_session.duration %> hours</p>
-
       <% if user_signed_in? && current_user.role == "trainee" %>
         <div class="mt-4">
-          <%= form_with model: [ @workout_session, Booking.new ], url: workout_session_bookings_path(@workout_session), method: :post, local: true do |f| %>
-            <div class="form-group">
-              <%= f.label :booked_at, "Select Session Time" %>
-              <%= f.datetime_local_select :booked_at, class: "form-control" %>
-            </div>
-            <div class="form-group mt-3">
-              <%= f.label :status, "Booking Status" %>
-              <%= f.select :status, ['pending', 'confirmed', 'canceled'], {}, class: "form-control" %>
-            </div>
-            <%= f.submit "Book Now", class: "btn btn-success btn-lg mt-4" %>
-          <% end %>
+          <%= link_to "Book Now", new_workout_session_booking_path(@workout_session), class: "btn btn-success btn-lg" %>
         </div>
       <% end %>
-
       <div class="mt-3 d-flex justify-content-between">
         <%= link_to "Back to Workout Sessions", workout_sessions_path, class: "btn btn-secondary" %>
-        <% if user_signed_in?%>
-          <%= button_to "Book Now!", workout_session_bookings_path(@workout_session), method: :post, class: "btn btn-success" %>
+        <% if user_signed_in? %>
+          <%= link_to "Book Now!", new_workout_session_booking_path(@workout_session), class: "btn btn-success" %>
         <% else %>
           <%= link_to "Sign in to Book Now!", new_user_session_path, class: "btn btn-primary" %>
         <% end %>

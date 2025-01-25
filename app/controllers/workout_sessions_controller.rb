@@ -1,5 +1,6 @@
 class WorkoutSessionsController < ApplicationController
   before_action :set_workout_session, only: [:show]
+  skip_before_action :authenticate_user!, only: [:index, :show]
 
   # Displays a single workout session
   def show

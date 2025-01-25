@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h1 class="card-title">Book Session: <%= @workout_session.title %></h1>
+    </div>
+    <div class="card-body">
+      <p class="card-text"><strong>Trainer:</strong> <%= @workout_session.trainer&.name || "No Trainer Assigned" %></p>
+      <p class="card-text"><strong>Location:</strong> <%= @workout_session.location %></p>
+      <p class="card-text"><strong>Duration:</strong> <%= @workout_session.duration %> hours</p>
+      <p class="card-text"><strong>Price:</strong> $<%= @workout_session.price %></p>
+      <%= form_with model: [@workout_session, @booking], local: true do |f| %>
+        <div class="form-group">
+          <%= f.label :start_time, "Choose Your Session Time" %>
+          <%= f.datetime_local_field :start_time, class: "form-control" %>
+        </div>
+        <%= f.submit "Confirm Booking", class: "btn btn-success mt-4" %>
+      <% end %>
+    </div>
+    <div class="card-footer">
+      <%= link_to "Back to Workout Sessions", workout_sessions_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+</div>

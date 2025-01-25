@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   # Sessions routes
   resources :workout_sessions, only: [:index, :show] do
     # Nested bookings routes for session-specific actions
-    resources :bookings, only: [:create]
+    resources :bookings, only: [:new, :create]
   end
 
   # Bookings routes

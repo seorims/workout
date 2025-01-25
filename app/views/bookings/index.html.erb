@@ -29,6 +29,11 @@
                   <i class="bi bi-person-circle me-2"></i>
                   <%= booking.workout_session.trainer.name %>
                 </p>
+                <!-- Display the status -->
+                <p class="card-text">
+                  <i class="bi bi-flag me-2"></i>
+                  <strong>Status:</strong> Pending
+                </p>
               </div>
               <div class="d-grid">
                 <%= link_to "View Details", workout_session_path(booking.workout_session),

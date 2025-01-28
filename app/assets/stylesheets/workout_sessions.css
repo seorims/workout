@@ -84,26 +84,3 @@ body {
 h1 {
   color: #333;
 }
-
-/* trainer-specific styles */
-.trainer-view .session-action .btn {
-  background: #dc3545;
-}
-
-.trainer-view .session-action .btn:hover {
-  background: #c82333;
-}
-
-.trainer-view .card-header {
-  background: #dc3545;
-}
-
-.trainer-view .btn-primary {
-  background: #dc3545;
-  border-color: #dc3545;
-}
-
-.trainer-view .btn-primary:hover {
-  background: #c82333;
-  border-color: #c82333;
-}

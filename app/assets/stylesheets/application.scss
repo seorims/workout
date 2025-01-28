@@ -10,3 +10,55 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
+
+/* trainer-specific styles */
+.trainer-view .session-action .btn {
+  background: #dc3545;
+}
+
+.trainer-view .session-action .btn:hover {
+  background: #c82333;
+}
+
+.trainer-view .card-header {
+  background: #dc3545;
+}
+
+.trainer-view .btn-primary {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+.trainer-view .card-header.bg-primary {
+  background-color: #dc3545 !important;
+}
+
+.trainer-view .btn-primary:hover {
+  background: #c82333;
+  border-color: #c82333;
+}
+
+.trainer-view .text-primary {
+  color: #dc3545 !important;
+}
+
+.trainer-view .btn-primary,
+.trainer-view .btn-outline-primary {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.trainer-view .btn-outline-primary {
+  background-color: transparent;
+  color: #dc3545;
+}
+
+.trainer-view .btn-outline-primary:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.trainer-view .bi {
+  color: #dc3545 !important;
+}

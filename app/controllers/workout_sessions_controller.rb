@@ -1,6 +1,7 @@
 class WorkoutSessionsController < ApplicationController
   before_action :set_workout_session, only: [:show]
   skip_before_action :authenticate_user!, only: [:index, :show]
+  before_action :ensure_trainer, only: [:new, :create]
 
   # Displays a single workout session
   def show
@@ -49,5 +50,11 @@ class WorkoutSessionsController < ApplicationController
 
   def workout_session_params
     params.require(:workout_session).permit(:title, :location, :duration, :price, :desc)
+  end
+
+  def ensure_trainer
+    unless current_user&.role == "Trainer"
+      redirect_to root_path, alert: "Only trainers can create sessions"
+    end
   end
 end

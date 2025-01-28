@@ -1,6 +1,7 @@
 class WorkoutSessionsController < ApplicationController
   before_action :set_workout_session, only: [:show]
   skip_before_action :authenticate_user!, only: [:index, :show]
+  before_action :ensure_trainer, only: [:new, :create]
 
   # Displays a single workout session
   def show
@@ -25,6 +26,19 @@ class WorkoutSessionsController < ApplicationController
     end
   end
 
+  def new
+    @workout_session = current_user.workout_sessions.build
+  end
+
+  def create
+    @workout_session = current_user.workout_sessions.build(workout_session_params)
+    if @workout_session.save
+      redirect_to workout_session_path(@workout_session), notice: 'Session created.'
+    else
+      render :new
+    end
+  end
+
   private
 
   # Finds the workout session by ID
@@ -32,5 +46,15 @@ class WorkoutSessionsController < ApplicationController
     @workout_session = WorkoutSession.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to workout_sessions_path, alert: "Workout session not found."
+  end
+
+  def workout_session_params
+    params.require(:workout_session).permit(:title, :location, :duration, :price, :desc)
+  end
+
+  def ensure_trainer
+    unless current_user&.role == "Trainer"
+      redirect_to root_path, alert: "Only trainers can create sessions"
+    end
   end
 end

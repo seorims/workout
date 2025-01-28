@@ -13,6 +13,7 @@ class User < ApplicationRecord
   # validations
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true, length: { minimum: 6 }
+  validates :role, presence: true, inclusion: { in: ['Trainer', 'Trainee'] }
 
   def avatar_url
     # uses ui-avatars api as fallback for all users

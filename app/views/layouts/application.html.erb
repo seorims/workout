@@ -21,6 +21,11 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <% if user_signed_in? %>
+              <% if current_user.role == "Trainer" %>
+                <li class="nav-item">
+                  <%= link_to "Create Session", new_workout_session_path, class: "nav-link" %>
+                </li>
+              <% end %>
               <li class="nav-item">
                 <%= link_to "My Bookings", bookings_path, class: "nav-link" %>
               </li>

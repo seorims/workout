@@ -27,7 +27,7 @@
                 </p>
                 <p class="card-text">
                   <i class="bi bi-person-circle me-2"></i>
-                  Trainer: <%= booking.workout_session.trainer&.name || "No Trainer Assigned" %>
+                  <%= booking.workout_session.trainer.name %>
                 </p>
 
                 <!-- Set the status of the first booking to 'Completed', others to 'Pending' -->

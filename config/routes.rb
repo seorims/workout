@@ -11,8 +11,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Sessions routes
-  resources :workout_sessions, only: [:index, :show] do
-    # Nested bookings routes for session-specific actions
+  resources :workout_sessions do
     resources :bookings, only: [:new, :create]
   end
 

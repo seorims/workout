@@ -44,15 +44,6 @@
         </div>
       </div>
     </nav>
-    <!-- Flash Messages -->
-    <div class="container mt-3">
-      <% flash.each do |key, message| %>
-        <div class="alert alert-<%= key == "notice" ? "success" : "danger" %> alert-dismissible fade show" role="alert">
-          <%= message %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <% end %>
-    </div>
     <!-- Main Content -->
     <%= yield %>
     <!-- Footer -->
@@ -60,5 +51,6 @@
       <p>&copy; <%= Time.current.year %> Workout. All rights reserved.</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <%= render "shared/flashes" %>
   </body>
 </html>

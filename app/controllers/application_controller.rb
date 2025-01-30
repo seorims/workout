@@ -36,4 +36,10 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
+
+  def authenticate_trainer!
+    unless current_user&.role == 'trainer'
+      redirect_to root_path, alert: 'Trainer access only'
+    end
+  end
 end

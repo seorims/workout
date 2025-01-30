@@ -5,6 +5,12 @@ class BookingsController < ApplicationController
   before_action :set_workout_session, only: [:new, :create]
   before_action :set_booking, only: [:update_status]
 
+  def authenticate_trainer!
+    unless current_user&.role == 'trainer'
+      redirect_to root_path, alert: 'Trainer access only'
+    end
+  end
+
   def new
     @booking = Booking.new
   end
@@ -26,7 +32,14 @@ class BookingsController < ApplicationController
   end
 
   def index
-    @bookings = current_user.bookings.includes(workout_session: :trainer)
+    if current_user.role == 'trainer'
+      @bookings = Booking.joins(:workout_session)
+                        .where(workout_sessions: { user_id: current_user.id })
+                        .includes(workout_session: :user)
+                        .order(created_at: :desc)
+    else
+      @bookings = current_user.bookings.includes(workout_session: :trainer)
+    end
   end
 
   def update_status

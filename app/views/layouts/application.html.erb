@@ -10,7 +10,7 @@
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   </head>
-  <body class="<%= current_user&.role == 'Trainer' ? 'trainer-view' : '' %>">
+  <body class="<%= current_user&.role %>-view">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <% if user_signed_in? %>
-              <% if current_user.role == "Trainer" %>
+              <% if current_user.role == "trainer" %>
                 <li class="nav-item">
                   <%= link_to "Create Session", new_workout_session_path, class: "nav-link" %>
                 </li>

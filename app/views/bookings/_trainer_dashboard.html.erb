@@ -1,26 +1,79 @@
-<div class="container">
-  <div class="row g-4">
-    <% @bookings.each do |booking| %>
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5><%= booking.workout_session.title %></h5>
-            <p>Client: <%= booking.user.name %></p>
-            <p>Date: <%= booking.start_time.strftime("%d/%m/%Y %H:%M") %></p>
-            <p>Status: <%= booking.status || 'pending' %></p>
-            <% if booking.status != 'confirmed' && booking.status != 'cancelled' %>
-              <div class="d-flex gap-2">
-                <%= button_to 'Accept', update_booking_status_path(booking, status: 'confirmed'),
-                    method: :patch,
-                    class: 'btn btn-success' %>
-                <%= button_to 'Reject', update_booking_status_path(booking, status: 'cancelled'),
-                    method: :patch,
-                    class: 'btn btn-danger' %>
+<div class="container-fluid bg-dark text-white py-5 mb-5">
+  <div class="container text-center">
+    <h1 class="display-4 fw-bold mb-4">My Sessions & Bookings</h1>
+    <p class="lead">Manage your workout sessions and client bookings</p>
+  </div>
+</div>
+<div class="container mb-5">
+  <% if @sessions.any? %>
+    <div class="row g-4">
+      <% @sessions.each do |session| %>
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-3">
+                <span class="display-6 me-3">💪</span>
+                <h3 class="card-title h5 mb-0"><%= session.title %></h3>
               </div>
-            <% end %>
+              <div class="mb-3">
+                <p class="card-text mb-2">
+                  <i class="bi bi-geo-alt me-2"></i>
+                  <%= session.location %>
+                </p>
+                <p class="card-text mb-2">
+                  <i class="bi bi-clock me-2"></i>
+                  <%= session.duration %> minutes
+                </p>
+                <p class="card-text mb-2">
+                  <i class="bi bi-currency-yen me-2"></i>
+                  <%= session.price %>
+                </p>
+              </div>
+              <% if session.bookings.any? %>
+                <hr>
+                <h6 class="fw-bold mb-3">Bookings</h6>
+                <% session.bookings.each do |booking| %>
+                  <div class="booking-card bg-light p-3 mb-2 rounded">
+                    <p class="card-text mb-2">
+                      <i class="bi bi-person me-2"></i>
+                      <strong>Requested by:</strong> <%= booking.user.name %>
+                    </p>
+                    <p class="card-text mb-2">
+                      <i class="bi bi-calendar3 me-2"></i>
+                      <strong>Requested Time:</strong>
+                      <%= booking.start_time.present? ? booking.start_time.strftime("%d/%m/%Y %H:%M") : "Not set" %>
+                    </p>
+                    <p class="card-text mb-2">
+                      <i class="bi bi-flag me-2"></i>
+                      <strong>Status:</strong> <%= booking.status || 'pending' %>
+                    </p>
+                    <% if booking.status != 'confirmed' && booking.status != 'cancelled' %>
+                      <div class="d-flex gap-2 mt-3">
+                        <%= button_to 'Accept', update_status_booking_path(booking, status: 'confirmed'),
+                            method: :patch,
+                            class: 'btn btn-success' %>
+                        <%= button_to 'Reject', update_status_booking_path(booking, status: 'cancelled'),
+                            method: :patch,
+                            class: 'btn btn-danger' %>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% else %>
+                <p class="text-muted mt-3">No bookings yet</p>
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <span class="display-3 mb-4 d-block">📅</span>
+      <h2 class="h4 mb-4">No Sessions Created</h2>
+      <p class="text-muted mb-4">Start by creating your first workout session</p>
+      <%= link_to "Create Session", new_workout_session_path,
+          class: "btn btn-primary btn-lg px-4" %>
+    </div>
+  <% end %>
 </div>

@@ -3,33 +3,3 @@
 <% else %>
   <%= render 'client_dashboard' %>
 <% end %>
-<%# Add this debugging section %>
-<% if Rails.env.development? %>
-  <div class="bg-gray-100 p-4 my-4">
-    <h3>Debug Info:</h3>
-    <p>User ID: <%= current_user.id %></p>
-    <p>Email: <%= current_user.email %></p>
-    <p>Role: <%= current_user.role %></p>
-    <% if current_user.role == 'trainer' %>
-      <% trainer_sessions = current_user.workout_sessions %>
-      <% trainer_bookings = Booking.joins(:workout_session)
-                                 .where(workout_sessions: { user_id: current_user.id }) %>
-      <h4>Your Workout Sessions:</h4>
-      <ul>
-        <% trainer_sessions.each do |session| %>
-          <li>Session #<%= session.id %></li>
-        <% end %>
-      </ul>
-      <h4>Bookings for Your Sessions:</h4>
-      <ul>
-        <% trainer_bookings.each do |booking| %>
-          <li>
-            Booking #<%= booking.id %> -
-            Session #<%= booking.workout_session_id %> -
-            Client: <%= booking.user.email %>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-  </div>
-<% end %>

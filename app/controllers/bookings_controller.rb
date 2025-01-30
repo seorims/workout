@@ -1,15 +1,8 @@
 class BookingsController < ApplicationController
-  # ensure users are authenticated before accessing booking actions
   before_action :authenticate_user!, only: [:new, :create, :index]
   before_action :authenticate_trainer!, only: [:update_status]
   before_action :set_workout_session, only: [:new, :create]
   before_action :set_booking, only: [:update_status]
-
-  def authenticate_trainer!
-    unless current_user&.role == 'trainer'
-      redirect_to root_path, alert: 'Trainer access only'
-    end
-  end
 
   def new
     @booking = Booking.new
@@ -33,30 +26,33 @@ class BookingsController < ApplicationController
 
   def index
     if current_user.role == 'trainer'
-      @bookings = Booking.joins(:workout_session)
-                        .where(workout_sessions: { user_id: current_user.id })
-                        .includes(workout_session: :user)
-                        .order(created_at: :desc)
+      @sessions = current_user.workout_sessions.includes(bookings: :user)
+      @bookings = current_user.workout_sessions.flat_map(&:bookings)
     else
       @bookings = current_user.bookings.includes(workout_session: :trainer)
     end
   end
 
   def update_status
-    status = params[:status]
+    @booking = Booking.find(params[:id])
 
-    unless %w[accepted rejected].include?(status)
-      render json: { message: 'Invalid status value' }, status: :bad_request and return
+    if current_user.role != 'trainer'
+      redirect_to bookings_path, alert: "You are not authorized to update bookings."
+      return
     end
 
-    if current_user.role != 'trainer' || current_user.id != @booking.trainer_id
-      render json: { message: 'Unauthorized' }, status: :forbidden and return
+    new_status = params[:status]
+
+    unless %w[confirmed cancelled].include?(new_status)
+      redirect_to bookings_path, alert: "Invalid status update."
+      return
     end
 
-    @booking.update(status: status)
-    render json: { message: "Booking #{status}", booking: @booking }, status: :ok
-  rescue StandardError => e
-    render json: { message: 'Internal server error', error: e.message }, status: :internal_server_error
+    if @booking.update(status: new_status)
+      redirect_to bookings_path, notice: "Booking has been #{new_status}."
+    else
+      redirect_to bookings_path, alert: "Failed to update booking."
+    end
   end
 
   private

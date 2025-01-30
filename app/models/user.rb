@@ -1,10 +1,11 @@
 class User < ApplicationRecord
   # trainer relationship
-  has_many :workout_sessions, foreign_key: "user_id", class_name: "WorkoutSession"
+  has_many :workout_sessions, foreign_key: "user_id"
 
-  # trainee relationship (via bookings)
+  # trainee relationship
   has_many :bookings
   has_many :attended_workouts, through: :bookings, source: :workout_session
+
 
   # devise modules
   devise :database_authenticatable, :registerable,
@@ -13,7 +14,7 @@ class User < ApplicationRecord
   # validations
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true, length: { minimum: 6 }
-  validates :role, presence: true, inclusion: { in: ['Trainer', 'Trainee'] }
+  validates :role, inclusion: { in: ['trainer', 'trainee'] }
 
   def avatar_url
     # uses ui-avatars api as fallback for all users

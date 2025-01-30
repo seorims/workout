@@ -17,4 +17,12 @@ Rails.application.routes.draw do
 
   # Bookings routes
   resources :bookings, only: [:index, :show, :update, :destroy]
+  patch '/bookings/:id', to: 'bookings#update_status', as: 'update_booking_status'
+
+  resources :bookings, only: [:index, :new, :create] do
+    member do
+      patch :update_status
+    end
+  end
+
 end

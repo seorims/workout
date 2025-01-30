@@ -32,6 +32,8 @@ class WorkoutSessionsController < ApplicationController
 
   def create
     @workout_session = current_user.workout_sessions.build(workout_session_params)
+    @workout_session.start_time = params[:workout_session][:start_time]
+
     if @workout_session.save
       redirect_to workout_session_path(@workout_session), notice: 'Session created.'
     else
@@ -49,11 +51,11 @@ class WorkoutSessionsController < ApplicationController
   end
 
   def workout_session_params
-    params.require(:workout_session).permit(:title, :location, :duration, :price, :desc)
+    params.require(:workout_session).permit(:title, :location, :duration, :price, :desc, :start_time)
   end
 
   def ensure_trainer
-    unless current_user&.role == "Trainer"
+    unless current_user&.role == "trainer"
       redirect_to root_path, alert: "Only trainers can create sessions"
     end
   end

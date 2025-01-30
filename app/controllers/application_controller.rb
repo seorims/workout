@@ -11,7 +11,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:role])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :role])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :role])
   end
 
   private
@@ -34,5 +35,11 @@ class ApplicationController < ActionController::Base
   # Redirect the user after signing out (optional)
   def after_sign_out_path_for(resource_or_scope)
     root_path
+  end
+
+  def authenticate_trainer!
+    unless current_user&.role == 'trainer'
+      redirect_to root_path, alert: 'Trainer access only'
+    end
   end
 end

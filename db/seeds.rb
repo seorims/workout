@@ -36,9 +36,9 @@ end
 
 # Create realistic sessions first
 realistic_sessions = [
- {title: "High Intensity Interval Training", location: "Downtown Gym", duration: 45, price: 35.00, desc: "Full body workout combining cardio and strength training"},
- {title: "Power Yoga Flow", location: "Zen Studio", duration: 60, price: 25.00, desc: "Dynamic yoga sequence focusing on strength and flexibility"},
- {title: "Olympic Weightlifting Basics", location: "Strength Hub", duration: 90, price: 45.00, desc: "Learn proper form for snatch and clean & jerk"}
+ {title: "High Intensity Interval Training", location: "Downtown Gym", duration: 45, price: 35, desc: "Full body workout combining cardio and strength training"},
+ {title: "Power Yoga Flow", location: "Zen Studio", duration: 60, price: 25, desc: "Dynamic yoga sequence focusing on strength and flexibility"},
+ {title: "Olympic Weightlifting Basics", location: "Strength Hub", duration: 90, price: 45, desc: "Learn proper form for snatch and clean & jerk"}
 ].map do |session|
  WorkoutSession.create!(
    title: session[:title],
@@ -96,7 +96,7 @@ puts "Created #{trainers.count} faker trainers and #{trainees.count} faker train
   title: "#{duration} min of #{sport}",
   location: Faker::Address.community,
   duration: duration,
-  price: rand(15.0..50.0).round(2),
+  price: rand(15..50).round(2),
   desc: descriptions.sample,
   user_id: trainers.sample.id
 )

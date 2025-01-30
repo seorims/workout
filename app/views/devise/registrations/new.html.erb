@@ -13,7 +13,7 @@
     <%= f.input :password_confirmation,
                 required: true,
                 input_html: { autocomplete: "new-password" } %>
-    <%= f.input :role, collection: ['Trainee', 'Trainer'], required: true %>
+    <%= f.input :role, collection: ['trainee', 'trainer'], required: true %>
   </div>
   <div class="form-actions">
     <%= f.button :submit, "Sign up" %>

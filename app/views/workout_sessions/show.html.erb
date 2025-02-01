@@ -8,7 +8,6 @@
       <p class="card-text"><strong>Price:</strong> $<%= @workout_session.price %></p>
       <p class="card-text"><strong>Location:</strong> <%= @workout_session.location %></p>
       <p class="card-text"><strong>Duration:</strong> <%= @workout_session.duration %> hours</p>
-
       <% if user_signed_in? && current_user.role == "trainee" %>
         <div class="mt-4">
           <%= link_to "Book Now", new_workout_session_booking_path(@workout_session), class: "btn btn-success btn-lg" %>
@@ -18,9 +17,13 @@
           <%= link_to "Sign in to Book Now!", new_user_session_path, class: "btn btn-primary btn-lg" %>
         </div>
       <% end %>
-
+      <% if user_signed_in? && current_user == @workout_session.trainer %>
+        <div class="mt-4">
+          <%= link_to "Edit Session", edit_workout_session_path(@workout_session), class: "btn btn-warning" %>
+        </div>
+      <% end %>
       <div class="mt-3 d-flex justify-content-between">
-        <%= link_to "Back to Workout Sessions", workout_sessions_path, class: "btn btn-secondary" %>
+        <%= link_to "to Workout Sessions", workout_sessions_path, class: "btn btn-secondary" %>
       </div>
     </div>
   </div>

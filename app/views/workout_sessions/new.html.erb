@@ -4,7 +4,7 @@
       <h1 class="card-title">Create New Session</h1>
     </div>
     <div class="card-body">
-      <%= form_with(model: @workout_session, local: true) do |f| %>
+      <%= form_with(model: @workout_session, url: workout_sessions_path, method: :post, local: true) do |f| %>
         <div class="mb-3">
           <%= f.label :title, class: "form-label" %>
           <%= f.text_field :title, class: "form-control" %>

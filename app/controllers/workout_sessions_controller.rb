@@ -3,6 +3,30 @@ class WorkoutSessionsController < ApplicationController
   before_action :authenticate_trainer!, only: [:edit, :update, :destroy, :cancel]
   before_action :set_workout_session, only: [:show, :edit, :update, :destroy, :cancel]
 
+  def index
+    @workout_sessions = WorkoutSession.all
+  end
+
+  def edit
+    # Ensure only the trainer who created the session can edit it
+    if current_user != @workout_session.trainer
+      redirect_to workout_sessions_path, alert: "You are not authorized to edit this session."
+    end
+  end
+
+  def update
+    if current_user != @workout_session.trainer
+      redirect_to workout_sessions_path, alert: "You are not authorized to update this session."
+      return
+    end
+
+    if @workout_session.update(workout_session_params)
+      redirect_to @workout_session, notice: "Workout session successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def cancel
     # Only allow the trainer who created the session to cancel it
     if current_user != @workout_session.trainer
@@ -28,9 +52,13 @@ class WorkoutSessionsController < ApplicationController
   private
 
   def set_workout_session
-    @workout_session = WorkoutSession.find_by(id: params[:id])
+  @workout_session = WorkoutSession.find_by(id: params[:id])
     unless @workout_session
       redirect_to workout_sessions_path, alert: "Session not found."
     end
+  end
+
+  def workout_session_params
+    params.require(:workout_session).permit(:title, :date, :time, :duration, :location, :status)
   end
 end

@@ -29,7 +29,7 @@
                   <%= session.price %>
                 </p>
               </div>
-              <!-- trainer cancel/delete buttons -->
+              <!-- Trainer cancel/delete buttons -->
               <% if current_user == session.trainer %>
                 <div class="mt-3">
                   <%= button_to 'Cancel Session', cancel_workout_session_path(session),
@@ -76,4 +76,19 @@
                             class: 'btn btn-warning' %>
                       </div>
                     <% end %>
-                    <% if current_user.role == 'trainer' %>
+                  </div>
+ <!-- Close booking-card -->
+                <% end %> <!-- Close session.bookings.each -->
+              <% end %> <!-- Close if session.bookings.any? -->
+            </div>
+ <!-- Close card-body -->
+          </div>
+ <!-- Close card -->
+        </div>
+ <!-- Close col-md-6 col-lg-4 -->
+      <% end %> <!-- Close @sessions.each -->
+    </div>
+ <!-- Close row g-4 -->
+  <% end %> <!-- Close if @sessions.any? -->
+</div>
+ <!-- Close container -->

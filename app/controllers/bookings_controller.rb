@@ -26,12 +26,14 @@ class BookingsController < ApplicationController
 
   def index
     if current_user.role == 'trainer'
-      @sessions = current_user.workout_sessions.includes(bookings: :user)
-      @bookings = current_user.workout_sessions.flat_map(&:bookings)
+      @sessions = WorkoutSession.where(user_id: current_user.id).includes(:bookings)
+      @bookings = Booking.where(workout_session_id: @sessions.pluck(:id)).includes(:user)
     else
       @bookings = current_user.bookings.includes(workout_session: :trainer)
     end
   end
+
+
 
   def update_status
     if current_user.role != 'trainer'

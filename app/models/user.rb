@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   # trainer relationship
-  has_many :workout_sessions, foreign_key: "user_id"
+  has_many :workout_sessions, foreign_key: "user_id", dependent: :destroy
 
   # trainee relationship
   has_many :bookings

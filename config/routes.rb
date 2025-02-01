@@ -2,27 +2,26 @@ Rails.application.routes.draw do
   # Devise routes for user authentication
   devise_for :users
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   # Root route
   root to: "pages#home"
 
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Sessions routes
-  resources :workout_sessions do
+  # Workout Sessions Routes (Trainers can delete/cancel sessions)
+  resources :workout_sessions, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
+    member do
+      patch :cancel # Trainers cancel sessions
+    end
     resources :bookings, only: [:new, :create]
   end
 
-  # Bookings routes
-  resources :bookings, only: [:index, :show, :update, :destroy]
-  patch '/bookings/:id', to: 'bookings#update_status', as: 'update_booking_status'
-
-  resources :bookings, only: [:index, :new, :create] do
+  # Bookings Routes (Trainees cancel their bookings)
+  resources :bookings, only: [:index, :destroy, :edit, :update] do
     member do
-      patch :update_status
+      patch :cancel # Trainees cancel bookings
+      patch :update_status # Trainers confirm/cancel bookings
+      patch :request_change  # New route for requesting changes to confirmed bookings
     end
   end
-
 end

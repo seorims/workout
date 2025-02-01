@@ -1,7 +1,8 @@
+<%# # nts, app/views/workout_sessions/new.html.erb AND edit.html.erb %>
 <div class="container mt-5">
   <div class="card shadow">
     <div class="card-header bg-primary text-white">
-      <h1 class="card-title">Create New Session</h1>
+      <h1 class="card-title"><%= @workout_session.persisted? ? "Edit Session" : "Create New Session" %></h1>
     </div>
     <div class="card-body">
       <%= form_with(model: @workout_session, local: true) do |f| %>
@@ -15,18 +16,18 @@
         </div>
         <div class="mb-3">
           <%= f.label :duration, "Duration (minutes)", class: "form-label" %>
-          <%= f.number_field :duration, class: "form-control" %>
+          <%= f.number_field :duration, min: 1, class: "form-control" %>
         </div>
         <div class="mb-3">
           <%= f.label :price, class: "form-label" %>
-          <%= f.number_field :price, step: "1", class: "form-control" %>
+          <%= f.number_field :price, step: "1", min: 0, class: "form-control" %>
         </div>
         <div class="mb-3">
           <%= f.label :desc, "Description", class: "form-label" %>
           <%= f.text_area :desc, class: "form-control" %>
         </div>
         <div class="d-grid gap-2">
-          <%= f.submit "Create Session", class: "btn btn-primary" %>
+          <%= f.submit @workout_session.persisted? ? "Update Session" : "Create Session", class: "btn btn-primary" %>
           <%= link_to "Back", workout_sessions_path, class: "btn btn-secondary" %>
         </div>
       <% end %>

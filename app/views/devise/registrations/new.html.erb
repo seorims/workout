@@ -15,8 +15,7 @@
     <%= f.input :password_confirmation,
                 required: true,
                 input_html: { autocomplete: "new-password" } %>
-    <%= f.input :role, collection: ['trainee', 'trainer'], required: true %>
-  </div>
+    <%= f.input :role, collection: ['trainee', 'trainer'], required: true, input_html: { class: 'text-capitalize' } %>  </div>
   <div class="form-actions">
     <%= f.button :submit, "Sign up" %>
   </div>

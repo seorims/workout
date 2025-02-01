@@ -2,7 +2,7 @@ require 'httparty'
 require 'open-uri'
 require 'faker'
 
-# Clear data
+# clear existing data
 Booking.destroy_all
 WorkoutSession.destroy_all
 User.destroy_all
@@ -37,7 +37,24 @@ admin_trainee = User.create!(
 file = URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainee.name}")
 admin_trainee.photo.attach(io: file, filename: "admin_trainee.svg", content_type: 'image/svg')
 
-# Create realistic trainers
+# hardcoded test accounts for debugging
+admin_trainer = User.create!(
+  name: "Admin trainer",
+  email: "trainer@admin.com",
+  password: "123456",
+  role: "trainer",
+  description: "Admin trainer for testing/debugging"
+)
+
+admin_trainee = User.create!(
+  name: "Admin trainee",
+  email: "trainee@admin.com",
+  password: "123456",
+  role: "trainee"
+)
+
+puts "Created hardcoded admin trainer and trainee accounts."
+
 realistic_trainers = [
   { name: "Nico Chu", email: "nico.chu@trainer.com", desc: "Ever heard of cheese rolling?" },
   { name: "Sarah Potter", email: "sarah.potter@trainer.com", desc: "I love cheese rolling." },
@@ -118,7 +135,33 @@ realistic_sessions.each do |session|
 puts "Attached photo"
 end
 
-# Create faker sessions with photos
+puts "Created #{realistic_sessions.count} realistic sessions"
+
+# create faker trainers
+trainers = 10.times.map do
+ User.create!(
+   name: Faker::Name.name,
+   email: Faker::Internet.email,
+   password: "password",
+   role: "trainer",
+   description: Faker::Job.title
+ )
+end
+
+# create faker trainees
+trainees = 10.times.map do
+ User.create!(
+   name: Faker::Name.name,
+   email: Faker::Internet.email,
+   password: "password",
+   role: "trainee",
+   description: Faker::Job.title
+ )
+end
+
+puts "Created #{trainers.count} faker trainers and #{trainees.count} faker trainees"
+
+# create faker workout sessions with better descriptions
 10.times do
  duration = [30, 45, 60, 90].sample
  sport = Faker::Sport.sport(include_ancient: true, include_unusual: true).titleize
@@ -151,7 +194,10 @@ end
    end
 end
 
-# Create bookings
+total_sessions = WorkoutSession.count
+puts "Total sessions created: #{total_sessions}"
+
+# create bookings
 WorkoutSession.all.each do |workout|
  rand(5..15).times do
    Booking.create!(

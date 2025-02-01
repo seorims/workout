@@ -76,7 +76,7 @@ end
   end
 
   def workout_session_params
-    params.require(:workout_session).permit(:title, :date, :time, :duration, :location, :status, :price, :desc)
+    params.require(:workout_session).permit(:title, :duration, :location, :status, :price, :desc)
   end
 
   def ensure_trainer

@@ -4,11 +4,6 @@
     <% @workout_sessions.each do |session| %>
       <div class="col-md-4">
         <div class="card h-100">
-          <!-- image -->
-          <img src="<%= session.trainer&.avatar_url || "https://ui-avatars.com/api/?name=#{session.trainer&.name || 'Trainer'}" %>"
-              class="card-img-top"
-              alt="<%= session.trainer&.name || 'Trainer' %>'s avatar">
-          <!-- card body -->
           <div class="card-body">
             <h5 class="card-title"><%= session.title %></h5>
             <p class="card-text">
@@ -19,7 +14,6 @@
             </p>
             <p class="card-text text-muted"><%= session.desc %></p>
           </div>
-          <!-- action button -->
           <div class="card-footer bg-white border-0 text-center">
             <%= link_to "Details", workout_session_path(session), class: "btn btn-primary w-100 mb-2" %>
             <%= link_to "Book Now!", new_workout_session_booking_path(session), class: "btn btn-primary w-100" %>

@@ -1,4 +1,5 @@
 class WorkoutSessionsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:index, :show]
   before_action :authenticate_trainer!, only: [:edit, :update, :destroy, :cancel]
   before_action :set_workout_session, only: [:show, :edit, :update, :destroy, :cancel]
 

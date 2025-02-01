@@ -12,7 +12,8 @@ class BookingsController < ApplicationController
     @booking = current_user.bookings.new(
       workout_session: @workout_session,
       start_time: booking_params[:start_time],
-      booked_at: Time.current.in_time_zone('Tokyo')
+      booked_at: Time.current.in_time_zone('Tokyo'),
+      status: 'pending'
     )
 
     if @booking.save

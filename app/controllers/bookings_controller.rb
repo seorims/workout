@@ -1,6 +1,6 @@
 class BookingsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :index, :cancel] # Ensure create is listed
-  before_action :authenticate_trainer!, only: [:update_status, :destroy]
+  before_action :authenticate_trainer!, only: [:update_status]
   before_action :set_booking, only: [:update_status, :cancel, :destroy]
   before_action :set_workout_session, only: [:new, :create]
 

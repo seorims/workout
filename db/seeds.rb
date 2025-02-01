@@ -6,16 +6,14 @@ require 'faker'
 Booking.destroy_all
 WorkoutSession.destroy_all
 User.destroy_all
+puts "Destroyed data!"
 
 # Unsplash setup
 UNSPLASH_ACCESS_KEY = ENV['UNSPLASH_ACCESS_KEY']
 
 def fetch_unsplash_image(sport)
   response = HTTParty.get("https://api.unsplash.com/photos/random?query=#{sport}&client_id=#{UNSPLASH_ACCESS_KEY}")
-  if response.success? ? response.parsed_response["urls"]["regular"] : nil
-  else
-  nil
-  end
+  response.success? ? response.parsed_response["urls"]["regular"] : nil
 end
 
 # Create admin accounts
@@ -26,7 +24,9 @@ admin_trainer = User.create!(
  role: "trainer",
  description: "Admin trainer for testing/debugging"
 )
-admin_trainer.photo.attach(io: URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainer.name}"), filename: "admin_trainer.svg")
+file = URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainer.name}")
+
+admin_trainer.photo.attach(io: file, filename: "admin_trainer.svg",  content_type: 'image/svg')
 
 admin_trainee = User.create!(
  name: "Admin trainee",
@@ -34,7 +34,8 @@ admin_trainee = User.create!(
  password: "123456",
  role: "trainee"
 )
-admin_trainee.photo.attach(io: URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainee.name}"), filename: "admin_trainee.svg")
+file = URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainee.name}")
+admin_trainee.photo.attach(io: file, filename: "admin_trainee.svg", content_type: 'image/svg')
 
 # Create realistic trainers
 realistic_trainers = [
@@ -69,6 +70,8 @@ realistic_trainers = [
  user
 end
 
+puts "Created trainers!"
+
 # Create realistic trainees with photos
 realistic_trainees = [
   { name: "Emma Davis", email: "emma.d@gmail.com" },
@@ -84,6 +87,8 @@ realistic_trainees = [
  user.photo.attach(io: URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{user.name}"), filename: "#{user.name.parameterize}.svg")
  user
 end
+
+puts "Created realistic trainee accounts!"
 
 realistic_sessions = [
   {title: "High Intensity Interval Training", location: "Downtown Gym", duration: 45, price: 35, desc: "Full body workout combining cardio and strength training"},
@@ -102,14 +107,15 @@ realistic_sessions.each do |session|
    user_id: realistic_trainers.sample.id
  )
 
- begin
-   if image_url = fetch_unsplash_image(session[:title])
+ puts "Created realistic sessions!"
+
+ image_url = fetch_unsplash_image(session[:title])
+
+   if image_url
      file = URI.open(image_url)
      workout.photo.attach(io: file, filename: "#{session[:title].parameterize}.jpg", content_type: "image/jpeg")
    end
- rescue OpenURI::HTTPError => e
-   puts "Failed to attach image for #{session[:title]}: #{e.message}"
- end
+puts "Attached photo"
 end
 
 # Create faker sessions with photos
@@ -138,14 +144,11 @@ end
    user_id: realistic_trainers.sample.id
  )
 
- begin
-   if image_url = fetch_unsplash_image(sport)
+ image_url = fetch_unsplash_image(sport)
+   if image_url
      file = URI.open(image_url)
      workout.photo.attach(io: file, filename: "#{sport.downcase}.jpg", content_type: "image/jpeg")
    end
- rescue OpenURI::HTTPError => e
-   puts "Failed to attach image for #{sport}: #{e.message}"
- end
 end
 
 # Create bookings

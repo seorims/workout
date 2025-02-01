@@ -4,6 +4,7 @@ class WorkoutSession < ApplicationRecord
   has_many :trainees, through: :bookings, source: :user
 
   validate :trainer_only_creates_sessions
+  has_one_attached :photo
 
   private
 

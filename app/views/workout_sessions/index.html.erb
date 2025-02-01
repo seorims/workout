@@ -4,6 +4,16 @@
     <% @workout_sessions.each do |session| %>
       <div class="col-md-4">
         <div class="card h-100">
+          <!-- image -->
+          <% if session.photo.attached? %>
+          <%= cl_image_tag session.photo.key, width: 400, height: 200 %>
+          <% else %>
+            <img src="https://images.unsplash.com/photo-1471295253337-3ceaaedca402?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                 class="card-img-top object-fit-cover"
+                 style="height: 200px;"
+                 alt="<%= session.title %>">
+          <% end %>
+          <!-- card body -->
           <div class="card-body">
             <h5 class="card-title"><%= session.title %></h5>
             <p class="card-text">

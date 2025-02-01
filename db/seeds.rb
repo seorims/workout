@@ -1,9 +1,41 @@
+require 'httparty'
+require 'open-uri'
 require 'faker'
 
 # clear existing data
 Booking.destroy_all
 WorkoutSession.destroy_all
 User.destroy_all
+puts "Destroyed data!"
+
+# Unsplash setup
+UNSPLASH_ACCESS_KEY = ENV['UNSPLASH_ACCESS_KEY']
+
+def fetch_unsplash_image(sport)
+  response = HTTParty.get("https://api.unsplash.com/photos/random?query=#{sport}&client_id=#{UNSPLASH_ACCESS_KEY}")
+  response.success? ? response.parsed_response["urls"]["regular"] : nil
+end
+
+# Create admin accounts
+admin_trainer = User.create!(
+ name: "Admin trainer",
+ email: "trainer@admin.com",
+ password: "123456",
+ role: "trainer",
+ description: "Admin trainer for testing/debugging"
+)
+file = URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainer.name}")
+
+admin_trainer.photo.attach(io: file, filename: "admin_trainer.svg",  content_type: 'image/svg')
+
+admin_trainee = User.create!(
+ name: "Admin trainee",
+ email: "trainee@admin.com",
+ password: "123456",
+ role: "trainee"
+)
+file = URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainee.name}")
+admin_trainee.photo.attach(io: file, filename: "admin_trainee.svg", content_type: 'image/svg')
 
 # hardcoded test accounts for debugging
 admin_trainer = User.create!(
@@ -36,7 +68,7 @@ realistic_trainers = [
   { name: "Cindy Mae Ngoho", email: "cindy.ngoho@trainer.com", desc: "From teaching to training, she brings an analytical approach to fitness. Focuses on weightlifting, body mechanics, and injury prevention." },
   { name: "Jakub Ohkado", email: "jakub.ohkado@trainer.com", desc: "An advocate for holistic strength and conditioning, combining structured training with a hands-on coaching style for all fitness levels." },
   { name: "Ben Pearson", email: "ben.pearson@trainer.com", desc: "A firm believer in movement as a lifelong pursuit. Specializes in endurance training, kettlebells, and functional movement." },
-  { name: "Maximilian Schöpf", email: "max.schopf@trainer.com", desc: "A meticulous trainer who values precision and technique. Expert in calisthenics, flexibility, and injury prevention strategies." },
+  { name: "Maximilian Schopf", email: "max.schopf@trainer.com", desc: "A meticulous trainer who values precision and technique. Expert in calisthenics, flexibility, and injury prevention strategies." },
   { name: "Allan Sechrist", email: "allan.sechrist@trainer.com", desc: "A strong proponent of strength training for all ages. Focuses on progressive overload, muscle control, and longevity in fitness." },
   { name: "Stamatios Stamatiou", email: "stamatiou@trainer.com", desc: "A performance coach with a keen eye for biomechanics. Specializes in strength development and bodyweight mastery." },
   { name: "Jasmine Stivers", email: "jasmine.stivers@trainer.com", desc: "An expert in efficient, minimalist training methods. Focuses on movement efficiency, balance, and flexibility." },
@@ -44,38 +76,46 @@ realistic_trainers = [
   { name: "Miyabi Tasaki", email: "miyabi.tasaki@trainer.com", desc: "A fitness enthusiast who approaches training with curiosity and passion. Focuses on foundational strength and body control." },
   { name: "Alexander Wong", email: "alex.wong@trainer.com", desc: "A versatile trainer with experience in multiple disciplines. Specializes in flexibility, mobility, and explosive power development." }
 ].map do |trainer|
-  User.create!(
-    name: trainer[:name],
-    email: trainer[:email],
-    password: "password",
-    role: "trainer",
-    description: trainer[:desc]
-  )
+ user = User.create!(
+   name: trainer[:name],
+   email: trainer[:email],
+   password: "password",
+   role: "trainer",
+   description: trainer[:desc]
+ )
+ user.photo.attach(io: URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{user.name}"), filename: "#{user.name.parameterize}.svg")
+ user
 end
 
-puts "Created #{realistic_trainers.count} realistic trainers."
+puts "Created trainers!"
 
-# create realistic trainees
+# Create realistic trainees with photos
 realistic_trainees = [
   { name: "Emma Davis", email: "emma.d@gmail.com" },
   { name: "James Wilson", email: "james.w@gmail.com" },
   { name: "Lisa Anderson", email: "lisa.a@gmail.com" }
 ].map do |trainee|
-  User.create!(
-    name: trainee[:name],
-    email: trainee[:email],
-    password: "password",
-    role: "trainee"
-  )
+ user = User.create!(
+   name: trainee[:name],
+   email: trainee[:email],
+   password: "password",
+   role: "trainee"
+ )
+ user.photo.attach(io: URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{user.name}"), filename: "#{user.name.parameterize}.svg")
+ user
 end
 
-# create realistic sessions first
+puts "Created realistic trainee accounts!"
+
 realistic_sessions = [
- {title: "High Intensity Interval Training", location: "Downtown Gym", duration: 45, price: 35, desc: "Full body workout combining cardio and strength training"},
- {title: "Power Yoga Flow", location: "Zen Studio", duration: 60, price: 25, desc: "Dynamic yoga sequence focusing on strength and flexibility"},
- {title: "Olympic Weightlifting Basics", location: "Strength Hub", duration: 90, price: 45, desc: "Learn proper form for snatch and clean & jerk"}
-].map do |session|
- WorkoutSession.create!(
+  {title: "High Intensity Interval Training", location: "Downtown Gym", duration: 45, price: 35, desc: "Full body workout combining cardio and strength training"},
+  {title: "Power Yoga Flow", location: "Zen Studio", duration: 60, price: 25, desc: "Dynamic yoga sequence focusing on strength and flexibility"},
+  {title: "Olympic Weightlifting Basics", location: "Strength Hub", duration: 90, price: 45, desc: "Learn proper form for snatch and clean & jerk"}
+]
+
+# Create realistic sessions with photos
+realistic_sessions.each do |session|
+ workout = WorkoutSession.create!(
    title: session[:title],
    location: session[:location],
    duration: session[:duration],
@@ -83,6 +123,16 @@ realistic_sessions = [
    desc: session[:desc],
    user_id: realistic_trainers.sample.id
  )
+
+ puts "Created realistic sessions!"
+
+ image_url = fetch_unsplash_image(session[:title])
+
+   if image_url
+     file = URI.open(image_url)
+     workout.photo.attach(io: file, filename: "#{session[:title].parameterize}.jpg", content_type: "image/jpeg")
+   end
+puts "Attached photo"
 end
 
 puts "Created #{realistic_sessions.count} realistic sessions"
@@ -126,15 +176,22 @@ puts "Created #{trainers.count} faker trainers and #{trainees.count} faker train
    "Immersive #{duration}-minute #{sport} session. Focus on form, strategy, and conditioning.",
    "#{sport} fundamentals and beyond in #{duration} minutes. Progress at your own pace."
  ]
+ sport = Faker::Sport.sport(include_ancient: true, include_unusual: true).titleize
 
- WorkoutSession.create!(
-  title: "#{duration} min of #{sport}",
-  location: Faker::Address.community,
-  duration: duration,
-  price: rand(15..50).round(2),
-  desc: descriptions.sample,
-  user_id: trainers.sample.id
-)
+ workout = WorkoutSession.create!(
+   title: "#{duration} min of #{sport}",
+   location: Faker::Address.community,
+   duration: duration,
+   price: rand(15..50).round(2),
+   desc: descriptions.sample,
+   user_id: realistic_trainers.sample.id
+ )
+
+ image_url = fetch_unsplash_image(sport)
+   if image_url
+     file = URI.open(image_url)
+     workout.photo.attach(io: file, filename: "#{sport.downcase}.jpg", content_type: "image/jpeg")
+   end
 end
 
 total_sessions = WorkoutSession.count
@@ -142,15 +199,13 @@ puts "Total sessions created: #{total_sessions}"
 
 # create bookings
 WorkoutSession.all.each do |workout|
-  rand(5..15).times do
-    Booking.create!(
-      workout_session: workout,
-      user: trainees.sample,
-      status: "confirmed",
-      start_time: Time.current + rand(1..30).days,  # Add this line
-      booked_at: Time.now
-    )
-  end
+ rand(5..15).times do
+   Booking.create!(
+     workout_session: workout,
+     user: realistic_trainees.sample,
+     status: "confirmed",
+     start_time: Time.current + rand(1..30).days,
+     booked_at: Time.now
+   )
+ end
 end
-
-puts "Created bookings for all sessions!"

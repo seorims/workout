@@ -1,0 +1,64 @@
+# Query: price
+# ContextLines: 1
+
+19 results - 9 files
+
+app/controllers/workout_sessions_controller.rb:
+  20            duration: 60,
+  21:           price: 20,
+  22            desc: "This is a placeholder description for styling purposes.",
+
+  51    def workout_session_params
+  52:     params.require(:workout_session).permit(:title, :location, :duration, :price, :desc)
+  53    end
+
+app/views/bookings/new.html.erb:
+   9        <p class="card-text"><strong>Duration:</strong> <%= @workout_session.duration %> hours</p>
+  10:       <p class="card-text"><strong>Price:</strong> $<%= @workout_session.price %></p>
+  11        <%= form_with model: [@workout_session, @booking], local: true do |f| %>
+
+app/views/pages/home.html.erb:
+  25              <div class="d-flex justify-content-between align-items-center">
+  26:               <span class="text-primary fw-bold fs-4">$<%= session.price %></span>
+  27                <%= link_to "Learn More", workout_session_path(session), class: "btn btn-outline-primary px-4" %>
+
+app/views/workout_sessions/index.html.erb:
+  17                <strong>Duration:</strong> <%= session.duration %> minutes<br>
+  18:               <strong>Price:</strong> $<%= session.price %>
+  19              </p>
+
+app/views/workout_sessions/new.html.erb:
+  20          <div class="mb-3">
+  21:           <%= f.label :price, class: "form-label" %>
+  22:           <%= f.number_field :price, step: "1", class: "form-control" %>
+  23          </div>
+
+app/views/workout_sessions/show.html.erb:
+  7        <p class="card-text"><%= @workout_session.desc %></p>
+  8:       <p class="card-text"><strong>Price:</strong> $<%= @workout_session.price %></p>
+  9        <p class="card-text"><strong>Location:</strong> <%= @workout_session.location %></p>
+
+db/schema.rb:
+  75      t.integer "duration"
+  76:     t.decimal "price", precision: 10, scale: 2
+  77      t.text "desc"
+
+db/seeds.rb:
+  38  realistic_sessions = [
+  39:  {title: "High Intensity Interval Training", location: "Downtown Gym", duration: 45, price: 35, desc: "Full body workout combining cardio and strength training"},
+  40:  {title: "Power Yoga Flow", location: "Zen Studio", duration: 60, price: 25, desc: "Dynamic yoga sequence focusing on strength and flexibility"},
+  41:  {title: "Olympic Weightlifting Basics", location: "Strength Hub", duration: 90, price: 45, desc: "Learn proper form for snatch and clean & jerk"}
+  42  ].map do |session|
+
+  46     duration: session[:duration],
+  47:    price: session[:price],
+  48     desc: session[:desc],
+
+  98    duration: duration,
+  99:   price: rand(15..50).round(2),
+  100    desc: descriptions.sample,
+
+db/migrate/20250118120000_create_workout_sessions.rb:
+  6        t.integer :duration
+  7:       t.decimal :price, precision: 10, scale: 2
+  8        t.text :desc

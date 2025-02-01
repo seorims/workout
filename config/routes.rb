@@ -17,10 +17,11 @@ Rails.application.routes.draw do
   end
 
   # Bookings Routes (Trainees cancel their bookings)
-  resources :bookings, only: [:index, :destroy] do
+  resources :bookings, only: [:index, :destroy, :edit, :update] do
     member do
       patch :cancel # Trainees cancel bookings
       patch :update_status # Trainers confirm/cancel bookings
+      patch :request_change  # New route for requesting changes to confirmed bookings
     end
   end
 end

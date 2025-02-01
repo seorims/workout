@@ -1,0 +1,35 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="card-title mb-4">Edit Booking</h2>
+          <%= form_with(model: @booking, local: true) do |f| %>
+            <div class="mb-3">
+              <p class="mb-2">
+                <strong>Session:</strong>
+                <%= @booking.workout_session.title %>
+              </p>
+              <p class="mb-2">
+                <strong>Trainer:</strong>
+                <%= @booking.workout_session.trainer.name %>
+              </p>
+              <p class="mb-3">
+                <strong>Current Status:</strong>
+                <%= @booking.status %>
+              </p>
+            </div>
+            <div class="mb-3">
+              <%= f.label :start_time, "Select New Time", class: "form-label" %>
+              <%= f.datetime_local_field :start_time, class: "form-control" %>
+            </div>
+            <div class="d-grid gap-2">
+              <%= f.submit "Update Booking", class: "btn btn-primary" %>
+              <%= link_to "Cancel", bookings_path, class: "btn btn-outline-secondary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

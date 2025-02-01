@@ -16,6 +16,8 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 }
   validates :role, inclusion: { in: ['trainer', 'trainee'] }
 
+  has_one_attached :photo
+
   def avatar_url
     # uses ui-avatars api as fallback for all users
     "https://ui-avatars.com/api/?name=#{name || 'User'}"

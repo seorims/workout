@@ -51,7 +51,7 @@ class WorkoutSessionsController < ApplicationController
   end
 
   def workout_session_params
-    params.require(:workout_session).permit(:title, :location, :duration, :price, :desc, :start_time)
+    params.require(:workout_session).permit(:title, :location, :duration, :price, :desc, :start_time, :photo)
   end
 
   def ensure_trainer

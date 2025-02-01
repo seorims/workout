@@ -5,9 +5,14 @@
       <div class="col-md-4">
         <div class="card h-100">
           <!-- image -->
-          <img src="<%= session.trainer&.avatar_url || "https://ui-avatars.com/api/?name=#{session.trainer&.name || 'Trainer'}" %>"
-              class="card-img-top"
-              alt="<%= session.trainer&.name || 'Trainer' %>'s avatar">
+          <% if session.photo.attached? %>
+          <%= image_tag session.photo.variant(resize: "400x200") %>
+          <% else %>
+            <img src="https://source.unsplash.com/random/400x200/?fitness"
+                 class="card-img-top object-fit-cover"
+                 style="height: 200px;"
+                 alt="<%= session.title %>">
+          <% end %>
           <!-- card body -->
           <div class="card-body">
             <h5 class="card-title"><%= session.title %></h5>

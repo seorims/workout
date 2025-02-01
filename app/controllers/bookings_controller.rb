@@ -1,7 +1,7 @@
 class BookingsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :index, :cancel] # Ensure create is listed
+  before_action :authenticate_user!, only: [:new, :create, :index, :cancel, :edit, :update, :request_change]
   before_action :authenticate_trainer!, only: [:update_status]
-  before_action :set_booking, only: [:update_status, :cancel, :destroy]
+  before_action :set_booking, only: [:update_status, :cancel, :destroy, :edit, :update, :request_change]
   before_action :set_workout_session, only: [:new, :create]
 
   def new
@@ -20,7 +20,7 @@ class BookingsController < ApplicationController
       redirect_to bookings_path, notice: 'Booking successfully created.'
     else
       Rails.logger.error @booking.errors.full_messages.join(", ")
-      flash[:alert] = "Failed to create booking: #{@booking.errors.full_messages.join(", " )}"
+      flash[:alert] = "Failed to create booking: #{@booking.errors.full_messages.join(", ")}"
       render :new
     end
   end
@@ -34,7 +34,23 @@ class BookingsController < ApplicationController
     end
   end
 
+  def edit
+    unless current_user == @booking.user
+      redirect_to bookings_path, alert: "You can only edit your own bookings."
+    end
+  end
 
+  def update
+    if current_user != @booking.user
+      return redirect_to bookings_path, alert: "You can only edit your own bookings."
+    end
+
+    if @booking.status == 'pending' && @booking.update(booking_params)
+      redirect_to bookings_path, notice: "Booking updated successfully."
+    else
+      render :edit
+    end
+  end
 
   def update_status
     if current_user.role != 'trainer'
@@ -57,8 +73,6 @@ class BookingsController < ApplicationController
   end
 
   def cancel
-
-    # cancel only if it's pending (already confirmed bookings cannot be cancelled)
     if @booking.status == 'pending'
       @booking.update(status: 'cancelled')
       redirect_to bookings_path, notice: "Booking has been cancelled."
@@ -80,8 +94,18 @@ class BookingsController < ApplicationController
     end
   end
 
+  def request_change
+    if current_user != @booking.user
+      return redirect_to bookings_path, alert: "You can only request changes to your own bookings."
+    end
 
-
+    if @booking.status == 'confirmed'
+      @booking.update(status: 'change_requested')
+      redirect_to bookings_path, notice: "Change request submitted. Awaiting trainer confirmation."
+    else
+      redirect_to bookings_path, alert: "Can only request changes for confirmed bookings."
+    end
+  end
 
   private
 

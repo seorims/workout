@@ -1,62 +1,35 @@
 class WorkoutSessionsController < ApplicationController
-  before_action :set_workout_session, only: [:show]
-  skip_before_action :authenticate_user!, only: [:index, :show]
-  before_action :ensure_trainer, only: [:new, :create]
+  before_action :authenticate_trainer!, only: [:edit, :update, :destroy, :cancel]
+  before_action :set_workout_session, only: [:show, :edit, :update, :destroy, :cancel]
 
-  # Displays a single workout session
-  def show
-    # @workout_session is already set by the before_action
-  end
-
-  def index
-    @workout_sessions = WorkoutSession.all
-
-    # add dummy placeholder sessions if none exist
-    if @workout_sessions.empty?
-      @workout_sessions = Array.new(3) do |i|
-        WorkoutSession.new(
-          title: "Session #{i + 1}",
-          location: "Placeholder Location",
-          duration: 60,
-          price: 20,
-          desc: "This is a placeholder description for styling purposes.",
-          user_id: nil # No associated trainer
-        )
-      end
+  def cancel
+    # Only allow the trainer who created the session to cancel it
+    if current_user != @workout_session.trainer
+      redirect_to workout_sessions_path, alert: "You are not authorized to cancel this session."
+      return
     end
+
+    @workout_session.update(status: 'cancelled')
+    redirect_to workout_sessions_path, notice: "Session has been cancelled."
   end
 
-  def new
-    @workout_session = current_user.workout_sessions.build
-  end
-
-  def create
-    @workout_session = current_user.workout_sessions.build(workout_session_params)
-    @workout_session.start_time = params[:workout_session][:start_time]
-
-    if @workout_session.save
-      redirect_to workout_session_path(@workout_session), notice: 'Session created.'
-    else
-      render :new
+  def destroy
+    # Ensure only the trainer who created the session can delete it
+    if current_user != @workout_session.trainer
+      redirect_to workout_sessions_path, alert: "You are not authorized to delete this session."
+      return
     end
+
+    @workout_session.destroy
+    redirect_to workout_sessions_path, notice: "Workout session successfully deleted."
   end
 
   private
 
-  # Finds the workout session by ID
   def set_workout_session
-    @workout_session = WorkoutSession.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to workout_sessions_path, alert: "Workout session not found."
-  end
-
-  def workout_session_params
-    params.require(:workout_session).permit(:title, :location, :duration, :price, :desc, :start_time)
-  end
-
-  def ensure_trainer
-    unless current_user&.role == "trainer"
-      redirect_to root_path, alert: "Only trainers can create sessions"
+    @workout_session = WorkoutSession.find_by(id: params[:id])
+    unless @workout_session
+      redirect_to workout_sessions_path, alert: "Session not found."
     end
   end
 end

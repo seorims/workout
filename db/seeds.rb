@@ -37,22 +37,6 @@ admin_trainee = User.create!(
 file = URI.open("https://api.dicebear.com/7.x/avataaars/svg?seed=#{admin_trainee.name}")
 admin_trainee.photo.attach(io: file, filename: "admin_trainee.svg", content_type: 'image/svg')
 
-# hardcoded test accounts for debugging
-admin_trainer = User.create!(
-  name: "Admin trainer",
-  email: "trainer@admin.com",
-  password: "123456",
-  role: "trainer",
-  description: "Admin trainer for testing/debugging"
-)
-
-admin_trainee = User.create!(
-  name: "Admin trainee",
-  email: "trainee@admin.com",
-  password: "123456",
-  role: "trainee"
-)
-
 puts "Created hardcoded admin trainer and trainee accounts."
 
 realistic_trainers = [

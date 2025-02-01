@@ -147,35 +147,34 @@ puts "Created #{trainers.count} faker trainers and #{trainees.count} faker train
 
 # create faker workout sessions with better descriptions
 10.times do
- duration = [30, 45, 60, 90].sample
- sport = Faker::Sport.sport(include_ancient: true, include_unusual: true).titleize
+  duration = [30, 45, 60, 90].sample
+  sport = Faker::Sport.sport(include_ancient: true, include_unusual: true).titleize  # Generate sport name ONCE
 
- descriptions = [
-   "#{duration}-minute session focused on proper #{sport} technique and conditioning. Suitable for all skill levels.",
-   "Join us for #{duration} minutes of #{sport}. Build skills while improving overall fitness.",
-   "Master the fundamentals of #{sport} in this #{duration}-minute class. All experience levels welcome.",
-   "Elevate your #{sport} game with this #{duration}-minute training session. From basics to advanced techniques.",
-   "#{duration}-minute #{sport} workout combining skill development with physical conditioning.",
-   "Get fit through #{sport} in this #{duration}-minute class. Technical drills and cardio combined.",
-   "Immersive #{duration}-minute #{sport} session. Focus on form, strategy, and conditioning.",
-   "#{sport} fundamentals and beyond in #{duration} minutes. Progress at your own pace."
- ]
- sport = Faker::Sport.sport(include_ancient: true, include_unusual: true).titleize
+  descriptions = [
+    "#{duration}-minute #{sport} session focused on proper technique and conditioning. Suitable for all skill levels.",
+    "Join us for #{duration} minutes of #{sport}. Build skills while improving overall fitness.",
+    "Master the fundamentals of #{sport} in this #{duration}-minute class. All experience levels welcome.",
+    "Elevate your #{sport} game with this #{duration}-minute training session. From basics to advanced techniques.",
+    "#{duration}-minute #{sport} workout combining skill development with physical conditioning.",
+    "Get fit through #{sport} in this #{duration}-minute class. Technical drills and cardio combined.",
+    "Immersive #{duration}-minute #{sport} session. Focus on form, strategy, and conditioning.",
+    "#{sport} fundamentals and beyond in #{duration} minutes. Progress at your own pace."
+  ]
 
- workout = WorkoutSession.create!(
-   title: "#{duration} min of #{sport}",
-   location: Faker::Address.community,
-   duration: duration,
-   price: rand(15..50).round(2),
-   desc: descriptions.sample,
-   user_id: realistic_trainers.sample.id
- )
+  workout = WorkoutSession.create!(
+    title: "#{duration} min of #{sport}",
+    location: Faker::Address.community,
+    duration: duration,
+    price: rand(15..50).round(2),
+    desc: descriptions.sample,
+    user_id: realistic_trainers.sample.id
+  )
 
- image_url = fetch_unsplash_image(sport)
-   if image_url
-     file = URI.open(image_url)
-     workout.photo.attach(io: file, filename: "#{sport.downcase}.jpg", content_type: "image/jpeg")
-   end
+  image_url = fetch_unsplash_image(sport)
+  if image_url
+    file = URI.open(image_url)
+    workout.photo.attach(io: file, filename: "#{sport.downcase}.jpg", content_type: "image/jpeg")
+  end
 end
 
 total_sessions = WorkoutSession.count
